@@ -143,23 +143,28 @@ var BandsPlugin = Chart.PluginBase.extend({
         if(isSupported === false) { return ; }
 
         node = chartInstance.chart.ctx.canvas;
-        bandOptions = helpers.configMerge(Chart.Bands.defaults.bands, chartInstance.options.bands);
 
-        if (pluginBandOptionsHaveBeenSet(bandOptions)) {
+        for (var h = chartInstance.options.bands.length - 1; h >= 0; h--) {
+            var band = chartInstance.options.bands[h];
 
-            for (var i = 0; i < chartInstance.chart.config.data.datasets.length; i++) {
-                fill = calculateGradientFill(
-                                        node.getContext("2d"),
-                                        chartInstance.scales['y-axis-0'],
-                                        chartInstance.chart.height,
-                                        baseColor[i],
-                                        bandOptions.belowThresholdColour[i],
-                                        bandOptions.yValue
-                                    );
-                chartInstance.chart.config.data.datasets[i][colourProfile] = fill;
+            bandOptions = helpers.configMerge(Chart.Bands.defaults.bands, band);
+
+            if (pluginBandOptionsHaveBeenSet(bandOptions)) {
+
+                for (var i = 0; i < chartInstance.chart.config.data.datasets.length; i++) {
+                    fill = calculateGradientFill(
+                                            node.getContext("2d"),
+                                            chartInstance.scales['y-axis-0'],
+                                            chartInstance.chart.height,
+                                            baseColor[i],
+                                            bandOptions.belowThresholdColour[i],
+                                            bandOptions.yValue
+                                        );
+                    chartInstance.chart.config.data.datasets[i][colourProfile] = fill;
+                }
+            } else {
+                console.warn('ConfigError: The Chart.Bands.js config seems incorrect');
             }
-        } else {
-            console.warn('ConfigError: The Chart.Bands.js config seems incorrect');
         }
     },
 
@@ -170,23 +175,29 @@ var BandsPlugin = Chart.PluginBase.extend({
         if(isSupported === false) { return ;}
 
         node = chartInstance.chart.ctx.canvas;
-        bandOptions = helpers.configMerge(Chart.Bands.defaults.bands, chartInstance.options.bands);
 
-        if (typeof bandOptions.yValue === 'number') {
-            addBandLine(
-                node.getContext("2d"),
-                chartInstance.scales['y-axis-0'],
-                {
-                    'top': chartInstance.chartArea.top,
-                    'start': chartInstance.chartArea.left,
-                    'stop': chartInstance.chartArea.right,
-                },
-                bandOptions
-            );
+        for (var i = chartInstance.options.bands.length - 1; i >= 0; i--) {
+            var band = chartInstance.options.bands[i];
 
-        } else {
-            console.warn('ConfigError: The Chart.Bands.js plugin config requires a yValue');
+            bandOptions = helpers.configMerge(Chart.Bands.defaults.bands, band);
+
+            if (typeof bandOptions.yValue === 'number') {
+                addBandLine(
+                    node.getContext("2d"),
+                    chartInstance.scales['y-axis-0'],
+                    {
+                        'top': chartInstance.chartArea.top,
+                        'start': chartInstance.chartArea.left,
+                        'stop': chartInstance.chartArea.right,
+                    },
+                    bandOptions
+                );
+
+            } else {
+                console.warn('ConfigError: The Chart.Bands.js plugin config requires a yValue');
+            }
         }
+
     }
 });
 
