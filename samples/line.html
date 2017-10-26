@@ -35,23 +35,17 @@
                 labels: ["January", "February", "March", "April", "May", "June", "July"],
                 datasets: [{
                     label: "My First dataset",
-                    data: [40, 10, 10, 40, 80, 80, 80],
+                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
                     fill: false,
                     borderDash: [5, 5],
-                    borderColor: 'blue',
+                    borderColor: randomColor(1),
+                },
+                {
+                    label: "My First dataset",
+                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
+                    fill: false,
+                    borderColor: randomColor(1),
                 }]
-                // datasets: [{
-                //     label: "My First dataset",
-                //     data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
-                //     fill: false,
-                //     borderDash: [5, 5],
-                //     borderColor: randomColor(1),
-                // },{
-                //     label: "My Second dataset",
-                //     data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
-                //     fill: false,
-                //     borderColor: randomColor(1),
-                // }]
             },
             options: {
                 responsive: true,
@@ -121,9 +115,7 @@
                             fontFamily: 'Helvetica',
                             fontStyle: 'normal',
                         },
-                        color: [
-                            'green',
-                        ]
+                        color: 'red'
                     },
                     {
                         from: 20,
@@ -139,9 +131,7 @@
                             fontStyle: 'normal',
 
                         },
-                        color: [
-                            'green',
-                        ]
+                        color: randomColor(1)
                     },
                     {
                         from: 60,
@@ -157,9 +147,7 @@
                             fontStyle: 'normal',
 
                         },
-                        color: [
-                            'blue',
-                        ]
+                        color: randomColor(1)
                     }]
             }
         };

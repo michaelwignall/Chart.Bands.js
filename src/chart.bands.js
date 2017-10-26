@@ -86,19 +86,23 @@ function addBandLineLabel (ctx, options, position) {
 }
 
 function pluginBandOptionsHaveBeenSet (bandOptions) {
-    return (typeof bandOptions.color === 'object' && bandOptions.color.length > 0 && typeof bandOptions.yValue === 'number');
+    // return (typeof bandOptions.color === 'object' && bandOptions.color.length > 0 && typeof bandOptions.yValue === 'number');
+    return (typeof bandOptions.color === 'string');
 }
 
-function calculateGradientFill (ctx, scale, height, baseColor, gradientColor, value, bands) {
-    // In here we want to figure out all of the stops along the way and then add them to the line
-    var colours = ['red', 'green', 'blue'];
-
+function calculateGradientFill (ctx, scale, height, baseColor, bands) {
     // figure out the position of all the stops
     var stops = [];
 
     for (var i = 0; i < bands.length; i++) {
         var band = bands[i];
-        var colour = colours[i];
+        var bandOptions = helpers.configMerge(Chart.Bands.defaults.bands, band);
+
+        if (!pluginBandOptionsHaveBeenSet(bandOptions)) {
+            console.warn('ConfigError: The Chart.Bands.js config seems incorrect');
+            return;
+        }
+
         var fromY = scale.getPixelForValue(band.from);
         var toY = scale.getPixelForValue(band.to);
         var fromStop = 1 - (fromY / height);
@@ -106,14 +110,15 @@ function calculateGradientFill (ctx, scale, height, baseColor, gradientColor, va
 
         stops.push({
             pos: fromStop,
-            colour: colour
+            colour: bandOptions.color
         });
 
         stops.push({
             pos: toStop,
-            colour: colour
+            colour: bandOptions.color
         });
     }
+
     window.stops = stops;
 
     // add stops to the gradient
@@ -164,29 +169,15 @@ var BandsPlugin = Chart.PluginBase.extend({
 
         node = chartInstance.chart.ctx.canvas;
 
-        for (var h = chartInstance.options.bands.length - 1; h >= 0; h--) {
-            var band = chartInstance.options.bands[h];
-
-            bandOptions = helpers.configMerge(Chart.Bands.defaults.bands, band);
-
-            if (pluginBandOptionsHaveBeenSet(bandOptions)) {
-
-                for (var i = 0; i < chartInstance.chart.config.data.datasets.length; i++) {
-                    // MIKE: This will be done too many times as we're looping over shizzle, lets refactor once things are working though
-                    fill = calculateGradientFill(
-                                            node.getContext("2d"),
-                                            chartInstance.scales['y-axis-0'],
-                                            chartInstance.chart.height,
-                                            baseColor[i],
-                                            bandOptions.color[i],
-                                            bandOptions.yValue,
-                                            chartInstance.options.bands
-                                        );
-                    chartInstance.chart.config.data.datasets[i][colourProfile] = fill;
-                }
-            } else {
-                console.warn('ConfigError: The Chart.Bands.js config seems incorrect');
-            }
+        for (var i = 0; i < chartInstance.chart.config.data.datasets.length; i++) {
+            fill = calculateGradientFill(
+                                    node.getContext("2d"),
+                                    chartInstance.scales['y-axis-0'],
+                                    chartInstance.chart.height,
+                                    baseColor[i],
+                                    chartInstance.options.bands
+                                );
+            chartInstance.chart.config.data.datasets[i][colourProfile] = fill;
         }
     },
 
