@@ -35,16 +35,23 @@
                 labels: ["January", "February", "March", "April", "May", "June", "July"],
                 datasets: [{
                     label: "My First dataset",
-                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
+                    data: [40, 10, 10, 40, 80, 80, 80],
                     fill: false,
                     borderDash: [5, 5],
-                    borderColor: randomColor(1),
-                },{
-                    label: "My Second dataset",
-                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
-                    fill: false,
-                    borderColor: randomColor(1),
+                    borderColor: 'blue',
                 }]
+                // datasets: [{
+                //     label: "My First dataset",
+                //     data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
+                //     fill: false,
+                //     borderDash: [5, 5],
+                //     borderColor: randomColor(1),
+                // },{
+                //     label: "My Second dataset",
+                //     data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
+                //     fill: false,
+                //     borderColor: randomColor(1),
+                // }]
             },
             options: {
                 responsive: true,
@@ -102,7 +109,9 @@
                     }]
                 },
                 bands: [{
-                        yValue: randomScalingFactor(),
+                        from: 0,
+                        to: 20,
+                        yValue: 20,
                         bandLine: {
                             stroke: 1,
                             colour: "black",
@@ -111,11 +120,45 @@
                             fontSize: '12',
                             fontFamily: 'Helvetica',
                             fontStyle: 'normal',
+                        },
+                        color: [
+                            'green',
+                        ]
+                    },
+                    {
+                        from: 20,
+                        to: 60,
+                        yValue: 60,
+                        bandLine: {
+                            stroke: 1,
+                            colour: "red",
+                            type: 'dashed',
+                            label: 'Another important value',
+                            fontSize: '12',
+                            fontFamily: 'Helvetica',
+                            fontStyle: 'normal',
 
                         },
-                        belowThresholdColour: [
-                            randomColor(1),
-                            randomColor(1)
+                        color: [
+                            'green',
+                        ]
+                    },
+                    {
+                        from: 60,
+                        to: 140,
+                        yValue: 60,
+                        bandLine: {
+                            stroke: 1,
+                            colour: "red",
+                            type: 'dashed',
+                            label: 'Another important value',
+                            fontSize: '12',
+                            fontFamily: 'Helvetica',
+                            fontStyle: 'normal',
+
+                        },
+                        color: [
+                            'blue',
                         ]
                     }]
             }
