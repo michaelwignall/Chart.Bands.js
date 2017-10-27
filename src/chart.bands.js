@@ -135,15 +135,15 @@ function calculateGradientFill (ctx, scale, height, baseColor, bands) {
         });
     }
 
-    window.stops = stops;
-
     // add stops to the gradient
+    var grd;
     var error = false;
+
     try {
-        var grd = ctx.createLinearGradient(0, height, 0, 0);
+        grd = ctx.createLinearGradient(0, height, 0, 0);
         
-        for (var i = 0; i < stops.length; i++) {
-            var stop = stops[i];
+        for (var j = 0; j < stops.length; j++) {
+            var stop = stops[j];
             grd.addColorStop(stop.pos, stop.colour);
         }
 

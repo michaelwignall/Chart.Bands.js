@@ -51,15 +51,18 @@ defaultOptions = Chart.Bands.defaults = {
 };
 
 function addBandBackground (ctx, chart, yScale, xScale, band) {
-    return false;
     var fromX = xScale.left;
     var fromY = yScale.getPixelForValue(band.from);
-    var width = xScale.right - fromX;
-    var height = yScale.getPixelForValue(band.to);
+    var toX = xScale.right;
+    var toY = yScale.getPixelForValue(band.to);
 
     ctx.beginPath();
+    ctx.moveTo(fromX, fromY);
+    ctx.lineTo(fromX, toY);
+    ctx.lineTo(toX, toY);
+    ctx.lineTo(toX, fromY);
     ctx.fillStyle = band.backgroundColor;
-    ctx.fillRect(fromX, fromY, width, height);
+    ctx.fill();
 }
 
 function addBandLine (ctx, scale, constraints, options) {
@@ -143,15 +146,15 @@ function calculateGradientFill (ctx, scale, height, baseColor, bands) {
         });
     }
 
-    window.stops = stops;
-
     // add stops to the gradient
+    var grd;
     var error = false;
+
     try {
-        var grd = ctx.createLinearGradient(0, height, 0, 0);
+        grd = ctx.createLinearGradient(0, height, 0, 0);
         
-        for (var i = 0; i < stops.length; i++) {
-            var stop = stops[i];
+        for (var j = 0; j < stops.length; j++) {
+            var stop = stops[j];
             grd.addColorStop(stop.pos, stop.colour);
         }
 
