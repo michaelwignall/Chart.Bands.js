@@ -38,8 +38,7 @@ To configure the bands plugin, you can simply add new config options to your cha
 ## To-do Items
 The following features still need to be done:
 
-
-* To allow more than one band 
+* Allow each dataset to have different colours when they are in a band
 * To improve legends when a Band is displayed *Default legends can be a little misleading*
 
 ## Installation
