@@ -40,15 +40,18 @@ defaultOptions = Chart.Bands.defaults = {
 };
 
 function addBandBackground (ctx, chart, yScale, xScale, band) {
-    return false;
     var fromX = xScale.left;
     var fromY = yScale.getPixelForValue(band.from);
-    var width = xScale.right - fromX;
-    var height = yScale.getPixelForValue(band.to);
+    var toX = xScale.right;
+    var toY = yScale.getPixelForValue(band.to);
 
     ctx.beginPath();
+    ctx.moveTo(fromX, fromY);
+    ctx.lineTo(fromX, toY);
+    ctx.lineTo(toX, toY);
+    ctx.lineTo(toX, fromY);
     ctx.fillStyle = band.backgroundColor;
-    ctx.fillRect(fromX, fromY, width, height);
+    ctx.fill();
 }
 
 function addBandLine (ctx, scale, constraints, options) {
