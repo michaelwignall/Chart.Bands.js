@@ -34,6 +34,7 @@ defaultOptions = Chart.Bands.defaults = {
         from: 0,
         to: 0,
         yValue: false,
+        backgroundColor: 'transparent',
         bandLine: {
             stroke: 0.01,
             colour: 'rgba(0, 0, 0, 1.000)',
@@ -48,6 +49,18 @@ defaultOptions = Chart.Bands.defaults = {
         ]
     }
 };
+
+function addBandBackground (ctx, chart, yScale, xScale, band) {
+    return false;
+    var fromX = xScale.left;
+    var fromY = yScale.getPixelForValue(band.from);
+    var width = xScale.right - fromX;
+    var height = yScale.getPixelForValue(band.to);
+
+    ctx.beginPath();
+    ctx.fillStyle = band.backgroundColor;
+    ctx.fillRect(fromX, fromY, width, height);
+}
 
 function addBandLine (ctx, scale, constraints, options) {
     var yPos = scale.getPixelForValue(options.yValue),
@@ -192,7 +205,7 @@ var BandsPlugin = Chart.PluginBase.extend({
         }
     },
 
-    afterDraw: function(chartInstance) {
+    beforeDraw: function(chartInstance) {
         var node,
             bandOptions;
 
@@ -204,6 +217,16 @@ var BandsPlugin = Chart.PluginBase.extend({
             var band = chartInstance.options.bands[i];
 
             bandOptions = helpers.configMerge(Chart.Bands.defaults.bands, band);
+
+            if (typeof bandOptions.backgroundColor == 'string') {
+                addBandBackground(
+                    node.getContext("2d"),
+                    chartInstance,
+                    chartInstance.scales['y-axis-0'],
+                    chartInstance.scales['x-axis-0'],
+                    bandOptions
+                );
+            }
 
             if (typeof bandOptions.yValue === 'number') {
                 addBandLine(
